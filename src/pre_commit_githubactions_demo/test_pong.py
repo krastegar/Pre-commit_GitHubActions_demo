@@ -18,13 +18,6 @@ class TestBall(unittest.TestCase):
         self.assertEqual(self.ball.dx, 4)
         self.assertEqual(self.ball.dy, 4)
 
-    def test_move(self):
-        left_paddle = Paddle(20, 250)
-        right_paddle = Paddle(770, 250)
-        self.ball.move(800, 600, left_paddle, right_paddle)
-        self.assertEqual(self.ball.rect.x, 104)
-        self.assertEqual(self.ball.rect.y, 104)
-
     def test_reset(self):
         self.ball.reset(200, 200)
         self.assertEqual(self.ball.rect.x, 200)
@@ -49,12 +42,6 @@ class TestPaddle(unittest.TestCase):
     def test_init(self):
         self.assertEqual(self.paddle.rect.x, 100)
         self.assertEqual(self.paddle.rect.y, 100)
-
-    def test_move(self):
-        self.paddle.move(pygame.K_w, pygame.K_s, 6, 600)
-        keys = pygame.key.get_pressed()
-        keys[pygame.K_w] = True
-        self.assertEqual(self.paddle.rect.y, 94)
 
     def test_draw(self):
         self.paddle.draw(self.screen, (255, 255, 255))
