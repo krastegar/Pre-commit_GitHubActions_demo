@@ -1,0 +1,27 @@
+repos:
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    # Ruff version. Does the same thing as black, isort, and flake8 but with RUST syntax!
+    rev: v0.9.3
+    hooks:
+      # Run the linter.
+      - id: ruff
+        types_or: [ python, pyi ]
+        args: [ --fix ]
+      # Run the formatter.
+      - id: ruff-format
+        types_or: [ python, pyi ]
+  - repo: https://github.com/Lucas-C/pre-commit-hooks-safety
+    rev: v1.3.3
+    hooks:
+      -   id: python-safety-dependencies-check
+          files: requirements.txt
+          args: ["--ignore=pyproject.toml"]
+  - repo: https://github.com/Yelp/detect-secrets
+    rev: v1.4.0
+    hooks:
+      - id: detect-secrets
+        args: ["--baseline", ".secrets.baseline"]
+  - repo: https://github.com/sqlfluff/sqlfluff
+    rev: 1.4.5
+    hooks:
+      - id: sqlfluff-lint
