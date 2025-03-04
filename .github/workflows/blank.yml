@@ -34,35 +34,32 @@ jobs:
       # Installing the dependencies
       - name: Install dependencies
         run: pip install -r requirements.txt
-      
-      # Running the tests
-      - name: Run tests
-        run: unittest tests/
-      
+
       # lint the code
       - name: Super-Linter
         uses: super-linter/super-linter@v7.3.0
+      
+      # Running the tests
+      - name: Run tests
+        run: python -m unittest discover -s src/pre_commit_githubactions_demo -p "test_*.py"
   
-  docker:
+  build-and-push:
+    needs: test
     runs-on: ubuntu-latest
     steps:
-      -
-        name: Login to Docker Hub
-        uses: docker/login-action@v3
-        with:
-          username: ${{ vars.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_PASSWORD}}
-      
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
-      -
-        name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-      
-      - name: Build and push
-        uses: docker/build-push-action@v6
-        with:
-          push: true
-          tags: user/app:latest
-
-      
+      - uses: actions/checkout@v4
+      - name: Log in to Docker Hub
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ vars.DOCKER_USERNAME }}" --password-stdin
+      - name: Build Docker image
+        run: docker build -t ${{ vars.DOCKER_USERNAME }}/seurat_rstudio-server:pong-app .
+      - name: Push Docker image
+        run: docker push ${{ vars.DOCKER_USERNAME }}/seurat_rstudio-server:pong-app
+  
+  deploy:
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    steps:
+      - name: Pull and run Docker container
+        run: |
+          docker pull ${{ vars.DOCKER_USERNAME }}/seurat_rstudio-server:pong-app
+          docker run -d --name pong-app -p 8000:8000 ${{ vars.DOCKER_USERNAME }}/seurat_rstudio-server:pong-app

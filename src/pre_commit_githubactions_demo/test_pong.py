@@ -1,8 +1,6 @@
 import unittest
 import pygame
-from ..src.pre_commit_githubactions_demo.pong import Ball, Paddle
-
-# filepath: /home/krastegar0/Pre-commit_GitHubActions_demo/src/pre_commit_githubactions_demo/test_pong.py
+from src.pre_commit_githubactions_demo.pong import Ball, Paddle
 
 
 class TestBall(unittest.TestCase):
