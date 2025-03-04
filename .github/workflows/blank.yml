@@ -41,6 +41,15 @@ jobs:
         env:
           # To report GitHub Actions status checks
           GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
+          BASE_BRANCH: ${{ github.base_ref }}
+          DEFAULT_BRANCH: dev
+          VALIDATE_ALL_CODEBASE: False
+      
+      - name: auto-commit
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          branch: ${{ github.event.pull_request.head.ref || github.head_ref || github.ref }}
+          commit_message: "chore: fix linting issues"
       
       # Running the tests
       - name: Run tests
