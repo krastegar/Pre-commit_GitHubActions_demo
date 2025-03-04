@@ -43,7 +43,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
           BASE_BRANCH: ${{ github.base_ref }}
           DEFAULT_BRANCH: dev
-          VALIDATE_ALL_CODEBASE: False
+          VALIDATE_ALL_CODEBASE: FALSE
       
       - name: auto-commit
         uses: stefanzweifel/git-auto-commit-action@v5
