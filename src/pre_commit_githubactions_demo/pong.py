@@ -36,6 +36,9 @@ class Ball:
     def reset(self, x, y):
         self.rect.x, self.rect.y = x, y
         self.dx, self.dy = 4, 4
+        print(
+            "Resetting ball, the pong game was so fun and i want to do this again please meeasssageee mee alssoo heres my nubm"
+        )
 
     def draw(self, screen, color):
         pygame.draw.ellipse(screen, color, self.rect)
