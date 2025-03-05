@@ -44,12 +44,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Log in to Docker Hub
-        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ vars.DOCKER_USERNAME }}" --password-stdin
+      
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ vars.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD}}
+      
       - name: Build Docker image
-        run: docker build -t ${{ vars.DOCKER_USERNAME }}/seurat_rstudio-server:pong-app .
+        run: docker build -t ${{ vars.DOCKERHUB_USERNAME }}/seurat_rstudio-server:pong-app .
+      
       - name: Push Docker image
-        run: docker push ${{ vars.DOCKER_USERNAME }}/seurat_rstudio-server:pong-app
+        run: docker push ${{ vars.DOCKERHUB_USERNAME }}/seurat_rstudio-server:pong-app
   
   deploy:
     needs: build-and-push
@@ -57,5 +63,5 @@ jobs:
     steps:
       - name: Pull and run Docker container
         run: |
-          docker pull ${{ vars.DOCKER_USERNAME }}/seurat_rstudio-server:pong-app
-          docker run -d --name pong-app -p 8000:8000 ${{ vars.DOCKER_USERNAME }}/seurat_rstudio-server:pong-app
+          docker pull ${{ vars.DOCKERHUB_USERNAME }}/seurat_rstudio-server:pong-app
+          docker run -d --name pong-app -p 8000:8000 ${{ vars.DOCKERHUB_USERNAME }}/seurat_rstudio-server:pong-app
