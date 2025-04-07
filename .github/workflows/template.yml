@@ -40,19 +40,11 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
       
-      # Check for test files
-      - name: Check for test files
-        id: check_tests
-        run: |
-          if ls src/pre_commit_githubactions_demo/test_*.py 1> /dev/null 2>&1; then
-            echo "tests_exist=true" >> $GITHUB_ENV
-          else
-            echo "tests_exist=false" >> $GITHUB_ENV
-
-      # Running the tests
+      # Run tests
       - name: Run tests
-        if: env.tests_exist == 'true'
-        run: python -m unittest discover -s src/pre_commit_githubactions_demo -p "test_*.py"
+        run: |
+          # Assuming you have a test script or command
+          python -m unittest discover -s src/*test*.py
   
   build-and-push:
     needs: test
